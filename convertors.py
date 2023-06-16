@@ -373,9 +373,7 @@ class MarkdownConvertor(ConvertorInterface):
             converted = re.sub("Attach\\:(.*)\\.(\w{3})", lambda m: self._to_attachment(m, current_namespace), converted)
 
             # links syntax [[link|text]] -> [text](link)
-            converted = re.sub("\\[\\[http(.*)\\|(.*)\\]\\]", r"[\2](http\1)", converted)
-            converted = re.sub("\\[\\[(.*)/(.*)\\|(.*)\\]\\]", lambda m: self._to_internal_link(m), converted)
-            converted = re.sub("\\[\\[(.*)/(.*)\\]\\]", lambda m: self._to_internal_link(m), converted)
+            converted = re.sub("\\[\\[([^\\]]+)\\]\\]", lambda m: self._create_link(m), converted)
             # converted = re.sub("\[\[(.*)/(.*)\]\]", r"[\1 \2](\1/\2)", converted)
 
             # horizontal line syntax pmwiki = markdown
@@ -389,7 +387,23 @@ class MarkdownConvertor(ConvertorInterface):
             text = match.group(3)
         else:
             text = match.group(2)
-        return "[{0}]({1}/{2})".format(text.lower(), match.group(1).lower(), match.group(2).lower())
+        link = match.group(1)
+        name = match.group(2) or link
+        return "[{0}]({1})".format(name, link)
+
+    @staticmethod
+    def _create_link(match):
+        """ convert pmwiki internal or external link to markdown link """
+        link = match.group(1)
+        text = link
+        if '|' in link:
+            link, text = link.split('|')
+        link = link.strip()
+        text = text.strip()
+        if ' ' in link:
+            link = ''.join([i.capitalize() for i in link.split()])
+        return "[{0}]({1})".format(text, link)
+
 
     def _to_attachment(self, match, current_namespace):
         """ convert pmwiki attachment to markdown link"""
