@@ -85,8 +85,8 @@ This script only convert pmwiki files to dokuwiki files or markdown files.
 This script will do:
 * create output directory
 * convert pmwiki namespaces to directory. For example page with name like **Linux.Debian**
-    will be converted to a directory named **linux** (lowercase) that will contain
-    a file named **debian.txt** (lowercase)
+    will be converted to a directory named **Linux** that will contain
+    a file named **debian.md**
 * convert the content, only the *text=* line, to the target convertor.
 
 # What it does not:

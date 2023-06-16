@@ -13,13 +13,6 @@ WIKI_FILES_DIR = 'wiki.d'
 WIKI_ATTACHMENTS_DIR = 'uploads'
 
 
-def normalize(string):
-    """
-    normalise string to lowercase
-    """
-    return string.lower()
-
-
 def get_files(base):
     """
     list all the files in dir
@@ -41,7 +34,7 @@ def extract_dir_and_file(wiki_file):
     convert pmwiki file name to a directory and a file
     """
     (wiki_dir, wiki_file) = wiki_file.split(".", 1)
-    return  (normalize(wiki_dir), normalize(wiki_file))
+    return  ((wiki_dir), (wiki_file))
 
 
 def extract_dir_and_media(media_file):
@@ -49,7 +42,7 @@ def extract_dir_and_media(media_file):
     convert pmwiki file name to a directory and a file
     """
 
-    source_ns = normalize(os.path.dirname(media_file))
+    source_ns = (os.path.dirname(media_file))
     source_file = os.path.basename(media_file)
     return  (source_ns, source_file)
 
