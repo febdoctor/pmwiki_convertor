@@ -157,7 +157,24 @@ if __name__ == '__main__':
                         default='dokuwiki')
     ARGS = PARSER.parse_args()
 
-    if ARGS.file:
+    if ARGS.convertor == 'git':
+        import gitconvertor
+        if ARGS.file:
+            pmwikidir = os.path.dirname(ARGS.file)
+            files = [ARGS.file]
+        elif ARGS.directory:
+            pmwikidir = ARGS.directory + WIKI_FILES_DIR
+            files = get_files(os.path.join(ARGS.directory, WIKI_FILES_DIR))
+            files = [i for i in files if
+                        os.path.basename(i).split('.', 1)[1].lower() not in SKIP_FILENAMES
+                        and i[0] != '.']
+        else:
+            PARSER.print_help()
+            sys.exit(1)
+        gitdir = ARGS.output or 'gwiki'
+        convertor = gitconvertor.GitConvertor(gitdir)
+        convertor.convert_files(pmwikidir, files)
+    elif ARGS.file:
         convert_files(
             os.path.dirname(ARGS.file),
             [os.path.basename(ARGS.file)],
