@@ -32,10 +32,11 @@ import extractpmwiki
 
 
 class GitConvertor:
-    def __init__(self, outdir, email_domain='example.com'):
+    def __init__(self, outdir, defaultcategory='Main', email_domain='example.com'):
         self.textconvertor = convertors.MarkdownConvertor()
         self.outdir = outdir
         self.repo = Repo(outdir)
+        self.defaultcategory = defaultcategory
         self.emaildomain = email_domain
 
 
@@ -46,6 +47,8 @@ class GitConvertor:
                 continue
             outfilename = self.textconvertor.get_output_filename(v['filename'])
             wiki_namespace, wiki_file = outfilename.split(".", 1)
+            if wiki_namespace == self.defaultcategory:
+                wiki_namespace = ''
             outpath = os.path.join(self.outdir, wiki_namespace, wiki_file)
             dirpath = os.path.dirname(outpath)
             os.makedirs(dirpath, exist_ok=True)

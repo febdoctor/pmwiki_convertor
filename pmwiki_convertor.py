@@ -155,6 +155,9 @@ if __name__ == '__main__':
     PARSER.add_argument('--convertor', type=str,
                         help='convertor type: dokuwiki (default), markdown',
                         default='dokuwiki')
+    PARSER.add_argument('--defaultcategory', type=str,
+                        help='the name of the default category (default: Main)',
+                        default='Main')
     ARGS = PARSER.parse_args()
 
     if ARGS.convertor == 'git':
@@ -172,7 +175,7 @@ if __name__ == '__main__':
             PARSER.print_help()
             sys.exit(1)
         gitdir = ARGS.output or 'gwiki'
-        convertor = gitconvertor.GitConvertor(gitdir)
+        convertor = gitconvertor.GitConvertor(gitdir, ARGS.defaultcategory)
         convertor.convert_files(pmwikidir, files)
     elif ARGS.file:
         convert_files(
