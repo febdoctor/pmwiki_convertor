@@ -29,6 +29,7 @@ import os
 import convertors
 from git import Repo, Actor
 import extractpmwiki
+import datetime
 
 
 class GitConvertor:
@@ -66,4 +67,6 @@ class GitConvertor:
         author = v.get('author', 'Unknown author')
         actor = Actor(author, author.replace(' ', '_') + '@' + self.emaildomain)
         commitmsg = '%s: %s' % (v['filename'], v.get('csum', f'Edit by {author}'))
-        index.commit(commitmsg, author=actor, committer=actor)
+        cdate = datetime.datetime.utcfromtimestamp(v['time']).isoformat()
+        index.commit(commitmsg, author=actor, committer=actor,
+            author_date=cdate, commit_date=cdate)
