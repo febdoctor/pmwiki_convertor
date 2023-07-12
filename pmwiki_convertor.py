@@ -178,11 +178,12 @@ if __name__ == '__main__':
         convertor = gitconvertor.GitConvertor(gitdir, ARGS.defaultcategory)
         convertor.convert_files(pmwikidir, files)
     elif ARGS.file:
+        CONVERTOR = get_convertor(ARGS.convertor)
         convert_files(
             os.path.dirname(ARGS.file),
             [os.path.basename(ARGS.file)],
             ARGS.output,
-            ARGS.convertor)
+            CONVERTOR)
     elif ARGS.directory:
         WIKI_FILES = get_files(os.path.join(ARGS.directory, WIKI_FILES_DIR))
         ATTACHMENT_FILES = get_media_files(os.path.join(ARGS.directory, WIKI_ATTACHMENTS_DIR))
