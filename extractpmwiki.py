@@ -92,6 +92,9 @@ def extractversions(pagename, page):
 def extractall(directory, files):
     versions = []
     for fname in files:
+        if ',del-' in fname:
+            print(f'Skipping ${fname}')
+            continue
         print(fname)
         with open(os.path.join(directory, fname), 'rt', encoding="ISO-8859-1") as page:
             pageversions = extractversions(fname, page)
