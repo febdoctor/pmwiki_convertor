@@ -405,8 +405,10 @@ class MarkdownConvertor(ConvertorInterface):
             link, text = link.split('|')
         link = link.strip()
         text = text.strip()
+        def upperfirst(t):
+            return t[0].upper() + t[1:]
         if ' ' in link:
-            link = ''.join([i.capitalize() for i in link.split()])
+            link = ''.join([upperfirst(i) for i in link.split()])
         return "[{0}]({1})".format(text, link)
 
 
