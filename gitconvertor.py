@@ -41,11 +41,14 @@ class GitConvertor:
         self.emaildomain = email_domain
 
 
-    def convert_files(self, directory, filenames):
+    def convert_files(self, directory, filenames, spamkeywords=[]):
         versions = extractpmwiki.extractall(directory, filenames)
         for t,v in versions:
             if not v.get('text'):
                 continue
+            text = v.get('text')
+            if any((k in ' '.join(text)) for k in spamkeywords):
+                    continue
             outfilename = self.textconvertor.get_output_filename(v['filename'])
             wiki_namespace, wiki_file = outfilename.split(".", 1)
             if wiki_namespace == self.defaultcategory:

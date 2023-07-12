@@ -158,6 +158,9 @@ if __name__ == '__main__':
     PARSER.add_argument('--defaultcategory', type=str,
                         help='the name of the default category (default: Main)',
                         default='Main')
+    PARSER.add_argument('--spam', action='append',
+                        help='Spam keywords. Version with spam will be skipped.',
+                        default=[])
     ARGS = PARSER.parse_args()
 
     if ARGS.convertor == 'git':
@@ -176,7 +179,7 @@ if __name__ == '__main__':
             sys.exit(1)
         gitdir = ARGS.output or 'gwiki'
         convertor = gitconvertor.GitConvertor(gitdir, ARGS.defaultcategory)
-        convertor.convert_files(pmwikidir, files)
+        convertor.convert_files(pmwikidir, files, ARGS.spam)
     elif ARGS.file:
         CONVERTOR = get_convertor(ARGS.convertor)
         convert_files(
