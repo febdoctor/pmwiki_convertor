@@ -264,9 +264,14 @@ class MarkdownConvertor(ConvertorInterface):
             converted = re.sub("%3c", "<", converted)
 
             # # Table Creations
-            converted = re.sub("\\|{2}Border(.*)\n", "", converted, flags=re.IGNORECASE)
-            converted = re.sub("\\|{2}\\!", "|", converted)
-            converted = re.sub("\\!\\|{2}", "|", converted)
+            converted = re.sub("\\|{2}\\!", "||", converted)
+            converted = re.sub("\\!\\|{2}", "||", converted)
+            def tableheader(m):
+                headers = m.group(1).split('||')[1:]
+                return ('|' + '|'.join(headers) + '\n|---'
+                    + '|---'.join(' ' * (len(i) - 3) for i in headers)
+                    + '\n')
+            converted = re.sub("\\|{2}Border[^\n]*\n((\\|{2}([^\\|\n]+))+)\n", tableheader, converted, flags=re.IGNORECASE)
             converted = re.sub("\\|{2}", "|", converted)
 
             # # Order Lists (up to 5)
